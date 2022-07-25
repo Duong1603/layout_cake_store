@@ -191,11 +191,13 @@ class PageController extends Controller
         }
 
         Session::forget('cart');
-        $wishlists = Wishlist::where('id_user', Session::get('user')->id)->get();
-        if (isset($wishlists)) {
-            foreach ($wishlists as $element) {
-                $element->delete();
-            }
-        }
+        echo '<script>alert("bạn đã thanh toán đơn hàng thành công.");window.location.assign("/");</script>';
+        
+        // $wishlists = Wishlist::where('id_user', Session::get('user')->id)->get();
+        // if (isset($wishlists)) {
+        //     foreach ($wishlists as $element) {
+        //         $element->delete();
+        //     }
+        // }
     }
 }

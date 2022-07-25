@@ -1,5 +1,10 @@
 @extends('master')
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
     <div class="rev-slider">
         <div class="fullwidthbanner-container">
             <div class="fullwidthbanner">
@@ -69,7 +74,8 @@
                                                     @else
                                                         <span class="flash-del">{{ number_format($new->unit_price) }} Đồng
                                                         </span>
-                                                        <span class="flash-sale">{{ number_format($new->promotion_price) }}
+                                                        <span
+                                                            class="flash-sale">{{ number_format($new->promotion_price) }}
                                                             Đồng</span>
                                                     @endif
                                                 </p>
@@ -118,7 +124,8 @@
                                                     @else
                                                         <span class="flash-del">{{ number_format($km->unit_price) }}
                                                             Đồng</span>
-                                                        <span class="flash-sale">{{ number_format($km->promotion_price) }}
+                                                        <span
+                                                            class="flash-sale">{{ number_format($km->promotion_price) }}
                                                             Đồng</span>
                                                     @endif
                                                 </p>
