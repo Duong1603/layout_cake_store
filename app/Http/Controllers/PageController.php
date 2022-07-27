@@ -154,7 +154,7 @@ class PageController extends Controller
     public function postCheckout(Request $req)
     {
         $cart = Session::get('cart');
-        $customer = new Customer;
+        $customer = new Customer();
         $customer->name = $req->full_name;
         $customer->gender = $req->gender;
         $customer->email = $req->email;
@@ -163,9 +163,23 @@ class PageController extends Controller
 
         if (isset($req->notes)) {
             $customer->note = $req->notes;
-        } else {
-            $customer->note = "Không có ghi chú gì";
+        } else {//nếu thanh toán là vnpay
+            $cart=Session::get('cart');
+            return view('page.vnpay-index',compact('cart'));
         }
+
+            // if($request->input('payment_method')!="VNPAY"){
+            //     $cart=Session::get('cart');
+            //     $customer=new Customer();
+            //     $customer->name=$request->input('name');
+            //     $customer->gender=$request->input('gender');
+            //    // vân vân…..giữ nguyên đoạn này
+            //    //….
+            //    } else {//nếu thanh toán là vnpay
+            //     $cart=Session::get('cart');
+            //     return view('/vnpay-index',compact('cart'));
+            //     }
+            //    }//
 
         $customer->save();
 
@@ -200,4 +214,90 @@ class PageController extends Controller
         //     }
         // }
     }
+
+    public function createPayment(Request $request){
+        $cart=Session::get('cart');
+        $vnp_TxnRef = $request->transaction_id; //Mã giao dịch. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+        $vnp_OrderInfo = $request->order_desc;
+        $vnp_Amount = str_replace(',', '', $cart->totalPrice * 100);
+        $vnp_Locale = $request->language;
+        $vnp_BankCode =$request->bank_code;
+        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+        $inputData = array(
+        "vnp_Version" => "2.0.0",
+        "vnp_TmnCode" => env('VNP_TMNCODE'),
+        "vnp_Amount" => $vnp_Amount,
+        "vnp_Command" => "pay",
+        "vnp_CreateDate" => date('YmdHis'),
+        "vnp_CurrCode" => "VND",
+        "vnp_IpAddr" => $vnp_IpAddr,
+        "vnp_Locale" => $vnp_Locale,
+        "vnp_OrderInfo" => $vnp_OrderInfo,
+        "vnp_ReturnUrl" => route('vnpayReturn'),
+        "vnp_TxnRef" => $vnp_TxnRef,
+        );
+        if (isset($vnp_BankCode) && $vnp_BankCode != "") {
+        $inputData['vnp_BankCode'] = $vnp_BankCode;
+        }
+            ksort($inputData);
+            $query = "";
+            $i = 0;
+            $hashdata = "";
+        foreach ($inputData as $key => $value) {
+        if ($i == 1) {
+        $hashdata .= '&' . $key . "=" . $value;
+        } else {
+            $hashdata .= $key . "=" . $value;
+            $i = 1;
+        }
+        $query .= urlencode($key) . "=" . urlencode($value) . '&';
+        }
+        $vnp_Url = env('VNP_URL') . "?" . $query;
+        if (env('VNP_HASHSECRECT')) {
+        // $vnpSecureHash = md5($vnp_HashSecret . $hashdata);
+        // $vnpSecureHash = hash('sha256', env('VNP_HASHSECRECT').$hashdata);
+        $vnpSecureHash =   hash_hmac('sha512', $hashdata, env('VNP_HASHSECRECT'));
+        // $vnp_Url .= 'vnp_SecureHashType=SHA256&vnp_SecureHash=' . $vnpSecureHash;
+        $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+        }
+        //dd($vnp_Url);
+        return redirect($vnp_Url);
+        }
+
+        //ham nhan get request tra ve tu vnpay
+     public function vnpayReturn(Request $request){ 
+        if($request->vnp_ResponseCode=='00'){
+        $cart=Session::get('cart');
+        
+        //lay du lieu vnpay tra ve
+        $vnpay_Data=$request->all();
+        //insert du lieu vao bang payments
+        // ……..(xong bước 9 thì quay lại hoàn chỉnh code này để lưu dl thanh toán vào bảng payments.
+        //truyen inputData vao trang vnpay_return
+        return view('page.vnpay_return',compact('vnpay_Data'));
+        }
+    }
+    //hàm xử lý gửi email
+    public function postInputEmail(Request $req){
+        $email=$req->txtEmail;
+        //validate
+
+        // kiểm tra có user có email như vậy không
+        $user=User::where('email',$email)->get();
+        //dd($user);
+        if($user->count()!=0){
+            //gửi mật khẩu reset tới email
+            $sentData = [
+                'title' => 'Mật khẩu mới của bạn là:',
+                'body' => '123456'
+            ];
+            \Mail::to($email)->send(new \App\Mail\SendMail($sentData));
+            Session::flash('message', 'Send email successfully!');
+            return view('login');  //về lại trang đăng nhập của khách
+        }
+        else {
+              return redirect()->route('getInputEmail')->with('message','Your email is not right');
+        }
+    }//hết postInputEmail
+
 }

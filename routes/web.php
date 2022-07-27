@@ -42,3 +42,12 @@ Route::post('/login', [UserController::class, 'Login']);
 //-----------------checkout----------------------
 Route::get('check-out', [PageController::class, 'getCheckout'])->name('dathang');
 Route::post('check-out', [PageController::class, 'postCheckout'])->name('dathang');
+//------------------VNpay-------------------------
+
+Route::get('/vnpay-index',function(){
+    return view('page.vnpay-index');
+    });
+//Route xử lý nút Xác nhận thanh toán trên trang checkout.blade.php
+Route::post('/vnpay/create_payment',[PageController::class,'createPayment'])->name('postCreatePayment');
+//Route để gán cho key "vnp_ReturnUrl" ở bước 6
+Route::get('/vnpay_return',[PageController::class,'vnpayReturn'])->name('vnpayReturn');
