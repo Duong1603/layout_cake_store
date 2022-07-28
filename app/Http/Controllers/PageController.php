@@ -9,9 +9,10 @@ use App\Models\Slide;
 use App\Models\Product;
 use App\Models\Customer;
 use App\Models\Bill;
+use App\Models\User;
 use App\Models\BillDetail;
 use App\Models\Wishlist;
-
+use App\Mail\SendMail;
 use App\Models\Comment;
 use App\Models\ProductType;
 use Illuminate\Support\Facades\Session;
@@ -291,12 +292,12 @@ class PageController extends Controller
                 'title' => 'Mật khẩu mới của bạn là:',
                 'body' => '123456'
             ];
-            \Mail::to($email)->send(new \App\Mail\SendMail($sentData));
+            \Mail::to($email)->send(new SendMail($sentData));
             Session::flash('message', 'Send email successfully!');
-            return view('login');  //về lại trang đăng nhập của khách
+            return view('users.login');  //về lại trang đăng nhập của khách
         }
         else {
-              return redirect()->route('getInputEmail')->with('message','Your email is not right');
+              return redirect()->route('postInputEmail')->with('message','Your email is not right');
         }
     }//hết postInputEmail
 

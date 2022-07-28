@@ -7,12 +7,14 @@
                 <div class="input-box">
                     <i></i>
                     <input name="txtEmail" type="text" placeholder="Nhập địa chỉ email của bạn để nhận mật khẩu mới"
-                        value="{{ isset($request->txtEmail) ? $request->txtEmail : '' }}">
+                        value="{{ isset($request->txtEmail) ? $request->txtEmail : '' }}" />
                     <span class="error"></span>
                 </div>
                 <div class="btn-box">
-                    <input type='submit' value='Nhận mật khẩu' name="btnGetPassword" />
+                    <input type="submit" value="Nhận mật khẩu" name="btnGetPassword" />
                 </div>
+
+                
             </form>
         </div>
     </div>

@@ -15,6 +15,8 @@
                             <li><a href="/register">Đăng kí</a></li>
                             <li><a href="login">Đăng nhập</a></li>
                         @endif
+                        <li><a href="/input-email">reset</a></li>
+
                     </ul>
                 </div>
                 <div class="clearfix"></div>

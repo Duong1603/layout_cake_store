@@ -51,3 +51,11 @@ Route::get('/vnpay-index',function(){
 Route::post('/vnpay/create_payment',[PageController::class,'createPayment'])->name('postCreatePayment');
 //Route để gán cho key "vnp_ReturnUrl" ở bước 6
 Route::get('/vnpay_return',[PageController::class,'vnpayReturn'])->name('vnpayReturn');
+
+
+// Route xử lý email
+Route::get('/input-email',function(){
+    return view('emails.input-email');
+});
+
+Route::post('/input-email',[PageController::class,'postInputEmail'])->name('postInputEmail');
