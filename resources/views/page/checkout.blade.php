@@ -95,7 +95,6 @@
                                             @else
                                                 0
                                             @endif đồng
-                                            
                                         </h5>
                                         </div>
                                     <div class="clearfix"></div>
@@ -109,14 +108,14 @@
                                 <ul class="payment_methods methods">
                                     <li class="payment_method_bacs">
                                         <input id="payment_method_bacs" type="radio" class="input-radio"
-                                            name="payment_method" value="bacs"                     checked="checked"
+                                            name="payment_method" value="bacs"  checked="checked"
                                             data-order_button_text="">
                                         <label for="payment_method_bacs">Direct Bank Transfer </label>
                                         <div class="payment_box payment_method_bacs"
                                             style="display: block;">
                                             Make your payment directly into our bank account. Please use
                                             your Order ID as the payment reference.
-                                            Your order won’t be shipped until the funds have cleared in
+                                            Your order won't be shipped until the funds have cleared in
                                             our account.
                                             </div>
                                         </li>

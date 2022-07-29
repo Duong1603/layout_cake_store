@@ -3,22 +3,22 @@
     <div class="space50">&nbsp;</div>
     <div class="container beta-relative">
         <div class="container">
-            <div class="col-12 col-md-6" style="background: red;color:white">Số sản phẩm: {{ count($products) }}</div>
-            <div class="col-12 col-md-6" style="background: blue;color:white">Đã bán: <br />
+            {{-- <div class="col-12 col-md-6">Số sản phẩm: {{ count($products) }}</div>
+            <div class="col-12 col-md-6">Đã bán: <br />
                 <p>Tổng: </p>
                 <p>Hôm nay: 1</p>
                 <p>Tháng này: 3</p>
                 <p>Năm nay: 4</p>
-            </div>
+            </div> --}}
         </div>
         <div class="pull-left">
             <h2>List</h2>
         </div>
-        <div class="pull-right">
+        {{-- <div class="pull-right">
             <a href="" class="btn btn-primary">
                 Xuất ra PDF
             </a>
-        </div>
+        </div> --}}
         <table id="table_admin_product" class="table table-striped display">
             <thead>
                 <tr>
